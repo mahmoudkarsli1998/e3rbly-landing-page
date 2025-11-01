@@ -195,14 +195,11 @@ body {
 
 .logo-img {
     height: 40px;
-    width: auto;
-    border-radius: 12px; /* Makes the logo image rounded */
+    width: 40px;
+    border-radius: 12px;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
     transition: all 0.3s ease;
-    /* Remove background color and add transparency support */
-    mix-blend-mode: luminosity;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    margin-left: 10px;
 }
 
 .logo:hover .logo-img {
@@ -776,6 +773,19 @@ body {
     margin-bottom: 20px;
 }
 
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.footer-logo-img {
+    height: 32px;
+    width: 32px;
+    border-radius: 8px;
+}
+
 .footer-logo {
     font-size: 24px;
     font-weight: 700;
@@ -783,6 +793,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin: 0;
 }
 
 .footer-description {
