@@ -3,87 +3,215 @@
 <head>
     <!-- SEO Meta Tags -->
     <meta charset="UTF-8">
-    <meta name="vieto Firebase Hosting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="E3rbly - منصة شاملة لتعلم اللغة العربية والإعراب والنحو بالذكاء الاصطناعي">
+    <meta name="keywords" content="تعلم العربية, إعراب, نحو, ذكاء اصطناعي, تطبيق تعليمي">
+    <meta name="author" content="E3rbly Team">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="E3rbly - اعربلي | تعلم اللغة العربية بالذكاء الاصطناعي">
+    <meta property="og:description" content="منصة شاملة لتعلم اللغة العربية والإعراب والنحو بالذكاء الاصطناعي">
+    <meta property="og:image" content="./images/e3rblyy.png">
+    <meta property="og:url" content="https://e3rbly.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="E3rbly - اعربلي | تعلم اللغة العربية بالذكاء الاصطناعي">
+    <meta name="twitter:description" content="منصة شاملة لتعلم اللغة العربية والإعراب والنحو بالذكاء الاصطناعي">
+    <meta name="twitter:image" content="./images/e3rblyy.png">
+    
+    <title>E3rbly - اعربلي | تعلم اللغة العربية بالذكاء الاصطناعي</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./images/e3rblyy.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-brand">
+                    <img src="./images/e3rblyy.png" alt="E3rbly Logo" class="logo">
+                    <span class="brand-name">اعربلي</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home">الرئيسية</a></li>
+                    <li><a href="#features">المميزات</a></li>
+                    <li><a href="#levels">المستويات</a></li>
+                    <li><a href="#download">التحميل</a></li>
+                    <li><a href="#contact">التواصل</a></li>
+                </ul>
+                <div class="nav-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.5.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.5.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.5.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">تعلم اللغة العربية بالذكاء الاصطناعي</h1>
+                    <p class="hero-subtitle">منصة شاملة لتعلم الإعراب والنحو بطريقة تفاعلية وممتعة</p>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-number">50,000+</span>
+                            <span class="stat-label">تحميل</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">4.8</span>
+                            <span class="stat-label">تقييم</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">1,000+</span>
+                            <span class="stat-label">درس</span>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <a href="https://play.google.com/store/apps/details?id=com.mahmoudkarsli1998.e3rbly" class="btn btn-primary" target="_blank">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+                        </a>
+                        <a href="#" class="btn btn-secondary">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store">
+                            <span class="coming-soon">قريباً</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="./images/e3rblyy.png" alt="E3rbly App" class="app-mockup">
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">مميزات التطبيق</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>ذكاء اصطناعي متقدم</h3>
+                    <p>تحليل فوري ودقيق للجمل والكلمات مع تغذية راجعة شخصية</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>محتوى تعليمي شامل</h3>
+                    <p>دروس تفاعلية تغطي جميع جوانب النحو والإعراب</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>تمارين عملية</h3>
+                    <p>مئات التمارين المتدرجة في الصعوبة مع اختبارات تقييمية</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>تتبع التقدم</h3>
+                    <p>مراقبة مستمرة لتطور الأداء مع تقارير مفصلة</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+    <!-- Levels Section -->
+    <section id="levels" class="levels">
+        <div class="container">
+            <h2 class="section-title">المستويات التعليمية</h2>
+            <div class="levels-grid">
+                <div class="level-card">
+                    <h3>المستوى المبتدئ</h3>
+                    <ul>
+                        <li>أساسيات النحو والإعراب</li>
+                        <li>أقسام الكلام</li>
+                        <li>الجملة الاسمية والفعلية</li>
+                        <li>علامات الإعراب الأساسية</li>
+                    </ul>
+                </div>
+                <div class="level-card">
+                    <h3>المستوى المتوسط</h3>
+                    <ul>
+                        <li>المفاعيل والحال والتمييز</li>
+                        <li>الجملة الشرطية والاستفهام</li>
+                        <li>النواسخ وأحكامها</li>
+                        <li>الإضافة والنعت والبدل</li>
+                    </ul>
+                </div>
+                <div class="level-card">
+                    <h3>المستوى المتقدم</h3>
+                    <ul>
+                        <li>الأساليب النحوية المعقدة</li>
+                        <li>إعراب النصوص الأدبية</li>
+                        <li>القواعد الصرفية المتقدمة</li>
+                        <li>التحليل النحوي الشامل</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <div class="container">
+            <h2 class="section-title">حمل التطبيق الآن</h2>
+            <p class="download-subtitle">ابدأ رحلتك في تعلم اللغة العربية اليوم</p>
+            <div class="download-buttons">
+                <a href="https://play.google.com/store/apps/details?id=com.mahmoudkarsli1998.e3rbly" class="download-btn android" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+                </a>
+                <div class="download-btn ios">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store">
+                    <span class="coming-soon-badge">قريباً</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">تواصل معنا</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3>البريد الإلكتروني</h3>
+                    <a href="mailto:e3rbly@gmail.com">e3rbly@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <h3>وسائل التواصل</h3>
+                    <div class="social-links">
+                        <a href="https://eg.linkedin.com/in/e3rbly-co-82814b364" target="_blank">LinkedIn</a>
+                        <a href="https://www.facebook.com/profile.php?id=61581500033869" target="_blank">Facebook</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="./images/e3rblyy.png" alt="E3rbly Logo" class="footer-logo">
+                    <span>اعربلي</span>
+                </div>
+                <p class="footer-text">صنع بـ ❤️ لخدمة اللغة العربية وتعليمها</p>
+                <p class="footer-copyright">© 2025 E3RBLY. جميع الحقوق محفوظة</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
 </html>

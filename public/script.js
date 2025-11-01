@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Header scroll effect
 function initHeader() {
-    const header = document.getElementById('header');
+    const header = document.querySelector('.header');
     
     window.addEventListener('scroll', function() {
         if (window.scrollY > 50) {
@@ -24,8 +24,8 @@ function initHeader() {
 
 // Mobile menu toggle
 function initMobileMenu() {
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const navLinks = document.getElementById('navLinks');
+    const mobileMenuBtn = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-menu');
     
     if (mobileMenuBtn && navLinks) {
         mobileMenuBtn.addEventListener('click', function() {
@@ -34,7 +34,7 @@ function initMobileMenu() {
         });
         
         // Close menu when clicking on a link
-        const links = navLinks.querySelectorAll('.nav-link');
+        const links = navLinks.querySelectorAll('a');
         links.forEach(link => {
             link.addEventListener('click', function() {
                 mobileMenuBtn.classList.remove('active');
@@ -54,7 +54,7 @@ function initMobileMenu() {
 
 // Smooth scroll for anchor links
 function initSmoothScroll() {
-    const navLinks = document.querySelectorAll('.nav-link');
+    const navLinks = document.querySelectorAll('.nav-menu a');
     
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -63,7 +63,7 @@ function initSmoothScroll() {
             const targetSection = document.getElementById(targetId);
             
             if (targetSection) {
-                const headerHeight = document.getElementById('header').offsetHeight;
+                const headerHeight = document.querySelector('.header').offsetHeight;
                 const targetPosition = targetSection.offsetTop - headerHeight;
                 
                 window.scrollTo({
