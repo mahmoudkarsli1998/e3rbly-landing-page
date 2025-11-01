@@ -924,20 +924,109 @@ body {
         top: 80px;
         right: -100%;
         flex-direction: column;
-        background: rgba(0, 0, 0, 0.95);
-        backdrop-filter: blur(20px);
-        width: 250px;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(25px) saturate(180%);
+        -webkit-backdrop-filter: blur(25px) saturate(180%);
+        width: 280px;
         height: calc(100vh - 80px);
-        padding: 40px 20px;
-        border-radius: 20px 0 0 0;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-        transition: right 0.3s ease;
+        padding: 40px 25px;
+        border-radius: 25px 0 0 0;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-right: none;
+        box-shadow: -15px 0 40px rgba(0, 0, 0, 0.2), 
+                    inset 1px 1px 0 rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 999;
-        gap: 20px;
+        gap: 25px;
+        overflow: hidden;
+    }
+    
+    .nav-links::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, 
+            transparent, 
+            rgba(255, 255, 255, 0.3), 
+            transparent);
+    }
+    
+    .nav-links::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, 
+            rgba(102, 126, 234, 0.1) 0%, 
+            transparent 70%);
+        animation: glassShimmer 8s ease-in-out infinite;
+        pointer-events: none;
+    }
+    
+    @keyframes glassShimmer {
+        0%, 100% { 
+            transform: rotate(0deg) scale(1);
+            opacity: 0.3;
+        }
+        50% { 
+            transform: rotate(180deg) scale(1.1);
+            opacity: 0.1;
+        }
     }
     
     .nav-links.active {
         right: 0;
+        box-shadow: -20px 0 50px rgba(0, 0, 0, 0.3), 
+                    inset 1px 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Enhanced mobile nav links */
+    @media (max-width: 768px) {
+        .nav-link {
+            padding: 15px 20px;
+            margin: 5px 0;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1), 
+                transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .nav-link::after {
+            display: none; /* Remove the bottom border for mobile */
+        }
     }
     
     .mobile-menu-btn {
@@ -954,6 +1043,27 @@ body {
     
     .mobile-menu-btn.active span:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
+    }
+    
+    /* Mobile menu backdrop */
+    .mobile-menu-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 998;
+    }
+    
+    .mobile-menu-backdrop.active {
+        opacity: 1;
+        visibility: visible;
     }
     
     .hero-title {

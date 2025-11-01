@@ -323,6 +323,28 @@
         </svg>
     </button>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7b_GlGfVTgpCHlB8lb8Gn89C3syNvJU0",
+            authDomain: "e3rbly-io.firebaseapp.com",
+            projectId: "e3rbly-io",
+            storageBucket: "e3rbly-io.firebasestorage.app",
+            messagingSenderId: "223754335339",
+            appId: "1:223754335339:web:1965812dce24881852ad2e",
+            measurementId: "G-VKFET55NZQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+
     <!-- JavaScript -->
     <script src="script.js"></script>
 </body>

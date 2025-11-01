@@ -27,26 +27,59 @@ function initMobileMenu() {
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const navLinks = document.getElementById('navLinks');
     
+    // Create backdrop element
+    const backdrop = document.createElement('div');
+    backdrop.className = 'mobile-menu-backdrop';
+    document.body.appendChild(backdrop);
+    
     if (mobileMenuBtn && navLinks) {
         mobileMenuBtn.addEventListener('click', function() {
+            const isActive = mobileMenuBtn.classList.contains('active');
+            
             mobileMenuBtn.classList.toggle('active');
             navLinks.classList.toggle('active');
+            backdrop.classList.toggle('active');
+            
+            // Prevent body scroll when menu is open
+            if (!isActive) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
         });
         
         // Close menu when clicking on a link
         const links = navLinks.querySelectorAll('.nav-link');
         links.forEach(link => {
             link.addEventListener('click', function() {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
+                closeMenu();
             });
+        });
+        
+        // Close menu when clicking on backdrop
+        backdrop.addEventListener('click', function() {
+            closeMenu();
         });
         
         // Close menu when clicking outside
         document.addEventListener('click', function(e) {
             if (!mobileMenuBtn.contains(e.target) && !navLinks.contains(e.target)) {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
+                closeMenu();
+            }
+        });
+        
+        // Close menu function
+        function closeMenu() {
+            mobileMenuBtn.classList.remove('active');
+            navLinks.classList.remove('active');
+            backdrop.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Close menu on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                closeMenu();
             }
         });
     }
