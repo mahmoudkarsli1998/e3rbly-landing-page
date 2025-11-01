@@ -199,7 +199,19 @@ body {
     border-radius: 12px;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
     transition: all 0.3s ease;
-    margin-left: 10px;
+    margin-left: 15px;
+}
+
+.logo-text {
+    margin: 0 8px;
+}
+
+.logo-divider {
+    margin: 0 8px;
+}
+
+.logo-text-ar {
+    margin: 0 8px;
 }
 
 .logo:hover .logo-img {
@@ -267,6 +279,7 @@ body {
     border: none;
     cursor: pointer;
     padding: 10px;
+    z-index: 1001;
 }
 
 .mobile-menu-btn span {
@@ -275,6 +288,7 @@ body {
     background: white;
     border-radius: 3px;
     transition: all 0.3s ease;
+    display: block;
 }
 
 /* Hero Section */
@@ -907,16 +921,19 @@ body {
 @media (max-width: 768px) {
     .nav-links {
         position: fixed;
-        top: 70px;
+        top: 80px;
         right: -100%;
         flex-direction: column;
         background: rgba(0, 0, 0, 0.95);
         backdrop-filter: blur(20px);
         width: 250px;
+        height: calc(100vh - 80px);
         padding: 40px 20px;
-        border-radius: 20px 0 0 20px;
+        border-radius: 20px 0 0 0;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
         transition: right 0.3s ease;
+        z-index: 999;
+        gap: 20px;
     }
     
     .nav-links.active {
