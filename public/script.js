@@ -36,6 +36,11 @@ function initMobileMenu() {
         mobileMenuBtn.addEventListener('click', function() {
             const isActive = mobileMenuBtn.classList.contains('active');
             
+            // Track mobile menu interaction
+            trackPageInteraction('mobile_menu', {
+                action: isActive ? 'close' : 'open'
+            });
+            
             mobileMenuBtn.classList.toggle('active');
             navLinks.classList.toggle('active');
             backdrop.classList.toggle('active');
@@ -52,6 +57,12 @@ function initMobileMenu() {
         const links = navLinks.querySelectorAll('.nav-link');
         links.forEach(link => {
             link.addEventListener('click', function() {
+                // Track navigation link click
+                trackPageInteraction('navigation_click', {
+                    linkText: this.textContent,
+                    target: this.getAttribute('data-section'),
+                    href: this.getAttribute('href')
+                });
                 closeMenu();
             });
         });
@@ -116,7 +127,7 @@ function initScrollAnimations() {
     };
     
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
+        entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 // Get delay from data attribute
                 const delay = entry.target.getAttribute('data-delay') || 0;
@@ -172,7 +183,6 @@ function initActiveNavigation() {
         
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
             
             if (window.scrollY >= (sectionTop - 200)) {
                 current = section.getAttribute('id');
@@ -195,6 +205,12 @@ function scrollToFeatures() {
         const headerHeight = document.getElementById('header').offsetHeight;
         const targetPosition = featuresSection.offsetTop - headerHeight;
         
+        // Track navigation interaction
+        trackPageInteraction('navigation', {
+            action: 'scroll_to_features',
+            target: 'features_section'
+        });
+        
         window.scrollTo({
             top: targetPosition,
             behavior: 'smooth'
@@ -208,6 +224,12 @@ function scrollToDownload() {
     if (downloadSection) {
         const headerHeight = document.getElementById('header').offsetHeight;
         const targetPosition = downloadSection.offsetTop - headerHeight;
+        
+        // Track navigation interaction
+        trackPageInteraction('navigation', {
+            action: 'scroll_to_download',
+            target: 'download_section'
+        });
         
         window.scrollTo({
             top: targetPosition,
@@ -232,11 +254,47 @@ function downloadApp(platform) {
     }
 }
 
-// Show notification
-function showNotification(message, platform = null) {
+// Cookie Consent Functions
+function handleCookieChoice(consent) {
+    const cookieConsent = document.getElementById('cookieConsent');
+    
+    // Track cookie choice interaction
+    trackPageInteraction('cookie_consent', {
+        choice: consent ? 'accepted' : 'rejected',
+        timestamp: new Date()
+    });
+    
+    // Add fade out animation
+    cookieConsent.classList.add('fade-out');
+    
+    // Hide after animation
+    setTimeout(() => {
+        cookieConsent.style.display = 'none';
+    }, 500);
+    
+    // Save consent to Firestore (without localStorage persistence)
+    if (window.saveCookieConsent) {
+        window.saveCookieConsent(consent);
+    } else {
+        // Fallback - still initialize analytics if consent is given
+        if (consent && window.initializeAnalytics) {
+            window.initializeAnalytics();
+        }
+    }
+    
+    // Show notification
+    if (consent) {
+        showNotification('تم قبول ملفات تعريف الارتباط. شكراً لك!', 'success');
+    } else {
+        showNotification('تم رفض ملفات تعريف الارتباط.', 'info');
+    }
+}
+
+// Enhanced notification function with type support
+function showNotification(message, type = null) {
     // Create notification element
     const notification = document.createElement('div');
-    notification.className = 'notification glass-card';
+    notification.className = `notification glass-card ${type || ''}`;
     
     // Create notification content with icon and text
     const notificationContent = document.createElement('div');
@@ -247,8 +305,27 @@ function showNotification(message, platform = null) {
         justify-content: center;
     `;
     
-    // Add platform-specific icon
-    if (platform === 'ios') {
+    // Add type-specific icon
+    if (type === 'success') {
+        const successIcon = document.createElement('div');
+        successIcon.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22,4 12,14.01 9,11.01"></polyline>
+            </svg>
+        `;
+        notificationContent.appendChild(successIcon);
+    } else if (type === 'info') {
+        const infoIcon = document.createElement('div');
+        infoIcon.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        `;
+        notificationContent.appendChild(infoIcon);
+    } else if (type === 'ios') {
         const iosIcon = document.createElement('div');
         iosIcon.innerHTML = `
             <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="color: #60a5fa;">
@@ -256,7 +333,7 @@ function showNotification(message, platform = null) {
             </svg>
         `;
         notificationContent.appendChild(iosIcon);
-    } else if (platform === 'android') {
+    } else if (type === 'android') {
         const androidIcon = document.createElement('div');
         androidIcon.innerHTML = `
             <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor" style="color: #34d399;">
@@ -275,13 +352,21 @@ function showNotification(message, platform = null) {
     `;
     notificationContent.appendChild(messageText);
     
+    // Style the notification based on type
+    let backgroundColor = 'rgba(102, 126, 234, 0.9)'; // default
+    if (type === 'success') {
+        backgroundColor = 'rgba(16, 185, 129, 0.9)';
+    } else if (type === 'info') {
+        backgroundColor = 'rgba(59, 130, 246, 0.9)';
+    }
+    
     // Style the notification
     notification.style.cssText = `
         position: fixed;
         top: 100px;
         right: 20px;
         padding: 20px 30px;
-        background: rgba(102, 126, 234, 0.9);
+        background: ${backgroundColor};
         backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 16px;
@@ -334,10 +419,15 @@ function showNotification(message, platform = null) {
     }, 3000);
 }
 
-// Track download clicks (placeholder for analytics)
+// Track download clicks with session data
 function trackDownloadClick(platform) {
-    // This is where you would add your analytics code
     console.log(`Download clicked for platform: ${platform}`);
+    
+    // Track in session if available
+    if (window.getSessionInfo) {
+        const sessionInfo = window.getSessionInfo();
+        console.log(`Download tracked in session: ${sessionInfo.sessionId}`);
+    }
     
     // Example: Google Analytics
     // if (typeof gtag !== 'undefined') {
@@ -347,6 +437,40 @@ function trackDownloadClick(platform) {
     //         'event_label': 'App Download'
     //     });
     // }
+}
+
+// Track form submissions
+function trackFormSubmission(formType, data = {}) {
+    if (window.currentSessionDocRef) {
+        const submissionData = {
+            timestamp: new Date(),
+            formType: formType,
+            data: data
+        };
+        
+        // This would be implemented when updateSessionData is available
+        console.log('Form submission tracked:', submissionData);
+    }
+}
+
+// Track custom events
+function trackCustomEvent(eventName, eventData = {}) {
+    if (window.getSessionInfo) {
+        const sessionInfo = window.getSessionInfo();
+        console.log(`Custom event "${eventName}" tracked in session: ${sessionInfo.sessionId}`, eventData);
+    }
+}
+
+// Track page interactions
+function trackPageInteraction(interactionType, details = {}) {
+    const interactionData = {
+        type: interactionType,
+        timestamp: new Date(),
+        details: details,
+        url: window.location.href
+    };
+    
+    console.log('Page interaction tracked:', interactionData);
 }
 
 // Parallax effect for hero section
@@ -460,7 +584,43 @@ document.addEventListener('mousedown', function() {
     document.body.classList.remove('keyboard-nav');
 });
 
+// Session debugging functions
+window.showSessionDashboard = function() {
+    if (window.getSessionInfo) {
+        const sessionInfo = window.getSessionInfo();
+        console.group('📊 E3RBLY Session Dashboard');
+        console.log('Session ID:', sessionInfo.sessionId);
+        console.log('Start Time:', sessionInfo.startTime);
+        console.log('Duration:', sessionInfo.duration + ' seconds');
+        console.log('Current URL:', window.location.href);
+        console.log('User Agent:', navigator.userAgent);
+        console.log('Screen Resolution:', screen.width + 'x' + screen.height);
+        console.log('Viewport Size:', window.innerWidth + 'x' + window.innerHeight);
+        console.log('Language:', navigator.language);
+        console.log('Timezone:', Intl.DateTimeFormat().resolvedOptions().timeZone);
+        console.groupEnd();
+    } else {
+        console.log('Session tracking not initialized yet');
+    }
+};
+
+// Track page load completion
+window.addEventListener('load', function() {
+    trackCustomEvent('page_load_complete', {
+        loadTime: performance.now(),
+        readyState: document.readyState
+    });
+});
+
+// Track page unload
+window.addEventListener('beforeunload', function() {
+    trackCustomEvent('page_unload', {
+        timeOnPage: window.getSessionInfo ? window.getSessionInfo().duration : 0
+    });
+});
+
 // Console welcome message
 console.log('%c🎉 مرحباً بك في E3RBLY - اعربلي!', 'color: #667eea; font-size: 20px; font-weight: bold;');
 console.log('%cتطبيق تعلم اللغة العربية بالذكاء الاصطناعي', 'color: #764ba2; font-size: 14px;');
 console.log('%cللمزيد من المعلومات: https://e3rbly.com', 'color: #666; font-size: 12px;');
+console.log('%c📊 Type showSessionDashboard() to view session info', 'color: #10b981; font-size: 12px;');

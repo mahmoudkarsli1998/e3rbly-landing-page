@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firebase Connection Test - E3rbly</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #10b981;
+        }
+        
+        .error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+        }
+        
+        .info {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #3b82f6;
+        }
+        
+        .config-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Firebase Connection Test</h1>
+        
+        <div class="test-section">
+            <h3>1. Firebase Configuration</h3>
+            <p>Current Firebase configuration:</p>
+            <div id="configDisplay" class="config-display">Loading...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Basic Connection Test</h3>
+            <button class="test-button" onclick="testBasicConnection()">Test Firebase Connection</button>
+            <div id="connectionResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Firestore Write Test</h3>
+            <button class="test-button" onclick="testFirestoreWrite()">Test Firestore Write</button>
+            <div id="writeResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. Session Creation Test</h3>
+            <button class="test-button" onclick="testSessionCreation()">Test Session Creation</button>
+            <div id="sessionResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>5. Cookie Consent Test</h3>
+            <button class="test-button" onclick="testCookieConsent()">Test Cookie Consent</button>
+            <div id="cookieResult" class="result" style="display: none;"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>6. Firestore Read Test</h3>
+            <button class="test-button" onclick="testFirestoreRead()">Test Firestore Read</button>
+            <div id="readResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, getDocs, query, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7b_GlGfVTgpCHlB8lb8Gn89C3syNvJU0",
+            authDomain: "e3rbly-io.firebaseapp.com",
+            projectId: "e3rbly-io",
+            storageBucket: "e3rbly-io.firebasestorage.app",
+            messagingSenderId: "223754335339",
+            appId: "1:223754335339:web:1965812dce24881852ad2e",
+            measurementId: "G-VKFET55NZQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Display configuration
+        document.getElementById('configDisplay').textContent = JSON.stringify(firebaseConfig, null, 2);
+
+        // Test functions
+        window.testBasicConnection = async function() {
+            const resultDiv = document.getElementById('connectionResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Testing Firebase connection...';
+
+            try {
+                // Test if Firebase is initialized
+                if (app) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = '✅ Firebase app initialized successfully!\n\nApp details:\n' + 
+                        'Project ID: ' + firebaseConfig.projectId + '\n' +
+                        'Auth Domain: ' + firebaseConfig.authDomain + '\n' +
+                        'Storage Bucket: ' + firebaseConfig.storageBucket;
+                } else {
+                    throw new Error('Firebase app not initialized');
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Firebase connection failed:\n\n' + error.message + '\n\n' + error.stack;
+            }
+        };
+
+        window.testFirestoreWrite = async function() {
+            const resultDiv = document.getElementById('writeResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Testing Firestore write...';
+
+            try {
+                const testData = {
+                    message: 'Firebase test document',
+                    timestamp: new Date(),
+                    userAgent: navigator.userAgent,
+                    url: window.location.href,
+                    testId: 'test_' + Date.now()
+                };
+
+                const docRef = await addDoc(collection(db, "test"), testData);
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ Firestore write successful!\n\n' +
+                    'Document ID: ' + docRef.id + '\n' +
+                    'Collection: test\n' +
+                    'Data written: ' + JSON.stringify(testData, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Firestore write failed:\n\n' +
+                    'Error Code: ' + (error.code || 'Unknown') + '\n' +
+                    'Error Message: ' + error.message + '\n\n' +
+                    'Full Error: ' + JSON.stringify(error, null, 2);
+            }
+        };
+
+        window.testSessionCreation = async function() {
+            const resultDiv = document.getElementById('sessionResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Testing session creation...';
+
+            try {
+                const sessionData = {
+                    sessionId: 'test_session_' + Date.now(),
+                    startTime: new Date(),
+                    url: window.location.href,
+                    userAgent: navigator.userAgent,
+                    device: {
+                        browserName: 'Test Browser',
+                        osName: 'Test OS',
+                        screenResolution: screen.width + 'x' + screen.height
+                    },
+                    interactions: {
+                        pageViews: 1,
+                        clicks: 0,
+                        scrollDepth: 0
+                    },
+                    isActive: true
+                };
+
+                const docRef = await addDoc(collection(db, "sessions"), sessionData);
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ Session creation successful!\n\n' +
+                    'Session Document ID: ' + docRef.id + '\n' +
+                    'Collection: sessions\n' +
+                    'Session Data: ' + JSON.stringify(sessionData, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Session creation failed:\n\n' +
+                    'Error Code: ' + (error.code || 'Unknown') + '\n' +
+                    'Error Message: ' + error.message + '\n\n' +
+                    'Full Error: ' + JSON.stringify(error, null, 2);
+            }
+        };
+
+        window.testCookieConsent = async function() {
+            const resultDiv = document.getElementById('cookieResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Testing cookie consent...';
+
+            try {
+                const cookieData = {
+                    consent: true,
+                    timestamp: new Date(),
+                    userAgent: navigator.userAgent,
+                    url: window.location.href,
+                    sessionId: 'test_session_' + Date.now()
+                };
+
+                const docRef = await addDoc(collection(db, "cookies"), cookieData);
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ Cookie consent test successful!\n\n' +
+                    'Cookie Document ID: ' + docRef.id + '\n' +
+                    'Collection: cookies\n' +
+                    'Cookie Data: ' + JSON.stringify(cookieData, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Cookie consent test failed:\n\n' +
+                    'Error Code: ' + (error.code || 'Unknown') + '\n' +
+                    'Error Message: ' + error.message + '\n\n' +
+                    'Full Error: ' + JSON.stringify(error, null, 2);
+            }
+        };
+
+        window.testFirestoreRead = async function() {
+            const resultDiv = document.getElementById('readResult');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result info';
+            resultDiv.textContent = 'Testing Firestore read...';
+
+            try {
+                // Try to read from test collection
+                const q = query(collection(db, "test"), limit(5));
+                const querySnapshot = await getDocs(q);
+                
+                const docs = [];
+                querySnapshot.forEach((doc) => {
+                    docs.push({ id: doc.id, data: doc.data() });
+                });
+
+                resultDiv.className = 'result success';
+                resultDiv.textContent = '✅ Firestore read successful!\n\n' +
+                    'Documents found: ' + docs.length + '\n' +
+                    'Collection: test\n\n' +
+                    'Documents: ' + JSON.stringify(docs, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = '❌ Firestore read failed:\n\n' +
+                    'Error Code: ' + (error.code || 'Unknown') + '\n' +
+                    'Error Message: ' + error.message + '\n\n' +
+                    'Full Error: ' + JSON.stringify(error, null, 2);
+            }
+        };
+    </script>
+</body>
+</html>

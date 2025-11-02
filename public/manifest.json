@@ -1,0 +1,35 @@
+{
+  "name": "اِعْرِبلي – تطبيق الإعراب الذكي",
+  "short_name": "اِعْرِبلي",
+  "description": "تعلم الإعراب والنحو العربي بسهولة عبر تطبيق اِعْرِبلي الذكي.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "./images/e3rblyy.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "./images/e3rblyy.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "screenshots": [
+    {
+      "src": "./images/e3rblyy.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

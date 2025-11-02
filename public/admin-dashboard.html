@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E3rbly Admin Dashboard - Session Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        
+        .sessions-table {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+        
+        .sessions-table h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .error {
+            text-align: center;
+            padding: 40px;
+            color: #ef4444;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 E3rbly Session Analytics</h1>
+            <p>Real-time user session tracking and analytics dashboard</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalSessions">-</div>
+                <div class="stat-label">Total Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="activeSessions">-</div>
+                <div class="stat-label">Active Sessions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="avgDuration">-</div>
+                <div class="stat-label">Avg Duration (min)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalDownloads">-</div>
+                <div class="stat-label">App Downloads</div>
+            </div>
+        </div>
+        
+        <div class="sessions-table">
+            <h2>Recent Sessions</h2>
+            <button class="refresh-btn" onclick="loadSessions()">🔄 Refresh Data</button>
+            <div class="table-container">
+                <div id="sessionsContent" class="loading">
+                    Loading session data...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC7b_GlGfVTgpCHlB8lb8Gn89C3syNvJU0",
+            authDomain: "e3rbly-io.firebaseapp.com",
+            projectId: "e3rbly-io",
+            storageBucket: "e3rbly-io.firebasestorage.app",
+            messagingSenderId: "223754335339",
+            appId: "1:223754335339:web:1965812dce24881852ad2e",
+            measurementId: "G-VKFET55NZQ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Load sessions data
+        window.loadSessions = async function() {
+            try {
+                document.getElementById('sessionsContent').innerHTML = '<div class="loading">Loading session data...</div>';
+                
+                // Get sessions from Firestore
+                const q = query(collection(db, "sessions"), orderBy("startTime", "desc"), limit(50));
+                const querySnapshot = await getDocs(q);
+                
+                const sessions = [];
+                querySnapshot.forEach((doc) => {
+                    sessions.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Update statistics
+                updateStats(sessions);
+                
+                // Display sessions table
+                displaySessions(sessions);
+                
+            } catch (error) {
+                console.error("Error loading sessions: ", error);
+                document.getElementById('sessionsContent').innerHTML = '<div class="error">Error loading session data. Check console for details.</div>';
+            }
+        };
+
+        function updateStats(sessions) {
+            const totalSessions = sessions.length;
+            const activeSessions = sessions.filter(s => s.isActive).length;
+            const avgDuration = sessions.reduce((acc, s) => acc + (s.duration || 0), 0) / sessions.length / 60;
+            const totalDownloads = sessions.reduce((acc, s) => acc + (s.interactions?.downloads?.length || 0), 0);
+            
+            document.getElementById('totalSessions').textContent = totalSessions;
+            document.getElementById('activeSessions').textContent = activeSessions;
+            document.getElementById('avgDuration').textContent = avgDuration.toFixed(1);
+            document.getElementById('totalDownloads').textContent = totalDownloads;
+        }
+
+        function displaySessions(sessions) {
+            if (sessions.length === 0) {
+                document.getElementById('sessionsContent').innerHTML = '<div class="loading">No sessions found</div>';
+                return;
+            }
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Session ID</th>
+                            <th>Start Time</th>
+                            <th>Duration</th>
+                            <th>Device</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Downloads</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            sessions.forEach(session => {
+                const startTime = session.startTime?.toDate ? session.startTime.toDate().toLocaleString() : 'Unknown';
+                const duration = session.duration ? Math.round(session.duration / 60) + 'm' : '-';
+                const device = session.device ? `${session.device.browserName} on ${session.device.osName}` : 'Unknown';
+                const location = session.location ? `${session.location.city}, ${session.location.country}` : 'Unknown';
+                const status = session.isActive ? '🟢 Active' : '🔴 Ended';
+                const downloads = session.interactions?.downloads?.length || 0;
+                
+                tableHTML += `
+                    <tr>
+                        <td>${session.sessionId?.substring(0, 20)}...</td>
+                        <td>${startTime}</td>
+                        <td>${duration}</td>
+                        <td>${device}</td>
+                        <td>${location}</td>
+                        <td>${status}</td>
+                        <td>${downloads}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += '</tbody></table>';
+            document.getElementById('sessionsContent').innerHTML = tableHTML;
+        }
+
+        // Load data on page load
+        window.addEventListener('load', loadSessions);
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadSessions, 30000);
+    </script>
+</body>
+</html>
